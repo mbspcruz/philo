@@ -58,6 +58,7 @@ void	ft_putstr_fd(char *str, int fd)
 int	get_time()
 {
 	struct timeval start;
-	gettimeofday(&start, NULL);
+		if(gettimeofday(&start, NULL))
+			return (0);
 	return((start.tv_sec * 1000) + (start.tv_usec / 1000));
 }
