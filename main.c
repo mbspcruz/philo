@@ -31,9 +31,7 @@ int	time_of_death(t_philo *philo)
 	int l_meal;
 	t_death = 0;
 	l_meal = get_time() - philo->last_meal;
-	printf("is meal%d\n", l_meal);
 	t_death = philo->data->t_die - l_meal;
-	printf("is death %d", t_death);
 	if (t_death < 0)
 		t_death = 0;
 	return (t_death);
@@ -42,7 +40,7 @@ int	time_of_death(t_philo *philo)
 void	start_dying(t_philo *philo, int time_to_die)
 
 {
-	pthread_mutex_unlock(&philo->data->dead_lock);
+	pthread_mutex_lock(&philo->data->dead_lock);
 	sleepy_time(time_to_die);
 	printf(RED"[%d]Philosopher %d died\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
 	philo->data->philo_died = 1;
@@ -95,8 +93,21 @@ int	philo_eat(t_philo *philo)
 	printf(CYN"[%d]Philosopher %d is eating\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
 	pthread_mutex_lock(&philo->data->eat_lock);
 	philo->last_meal = get_time();
-	philo->n_meals++;
+	(philo->n_meals)++;
 	pthread_mutex_unlock(&philo->data->eat_lock);
+	if (philo->data->n_eat > 0 && philo->n_meals >= philo->data->n_eat)
+	{
+		pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+		pthread_mutex_lock(&philo->data->eat_lock);
+		philo->data->meals++;
+		if (philo->data->meals >= philo->data->n_philo)
+		{
+			philo->data->philo_died = 1;
+			return 0;
+		}
+		pthread_mutex_unlock(&philo->data->eat_lock);
+	}
 	sleepy_time(philo->data->t_eat);
 	return 1;
 }

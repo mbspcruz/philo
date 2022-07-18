@@ -65,15 +65,18 @@ t_data	*setup_args(int ac, char **av, t_data *data)
 	data->t_sleep = ft_atoi(av[4]);
 	if(ac == 6)
 		data->n_eat = ft_atoi(av[5]);
+	else
+		data->n_eat = -1;
 	data->init_time = get_time();
 	data->philo_died = 0;
+	data->meals = 0;
 	return (data);
 }
 
 int	valid_args(int ac, char **av)
 {
-	// if (ac < 5 || ac > 6)
-	// 	return 0;
+	if (ac == 5 || ac == 6)
+		return 1;
 	if (!is_digit(ac, av))
 		return 0;
 	return 1;

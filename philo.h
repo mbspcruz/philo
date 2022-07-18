@@ -37,6 +37,7 @@ typedef struct s_data
 	pthread_mutex_t dead_lock;
 	pthread_mutex_t eat_lock;
 	unsigned int	init_time;
+	int				meals;
 	struct s_philo			*philo;  
 }				t_data;
 
