@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:18:53 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/17 18:44:55 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/18 00:50:11 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,22 @@ void	sleepy_time(int time)
 
 int	time_of_death(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->dead_lock);
 	int t_death;
-	int current = get_time();
-	int l_meal = 0;
+	int l_meal;
 	t_death = 0;
-	l_meal = current - philo->last_meal;
+	l_meal = get_time() - philo->last_meal;
 	printf("is meal%d\n", l_meal);
 	t_death = philo->data->t_die - l_meal;
 	printf("is death %d", t_death);
 	if (t_death < 0)
 		t_death = 0;
-	pthread_mutex_unlock(&philo->data->dead_lock);	
 	return (t_death);
 }
 
 void	start_dying(t_philo *philo, int time_to_die)
 
 {
-	
+	pthread_mutex_unlock(&philo->data->dead_lock);
 	sleepy_time(time_to_die);
 	printf(RED"[%d]Philosopher %d died\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
 	philo->data->philo_died = 1;
@@ -100,7 +97,6 @@ int	philo_eat(t_philo *philo)
 	philo->last_meal = get_time();
 	philo->n_meals++;
 	pthread_mutex_unlock(&philo->data->eat_lock);
-	
 	sleepy_time(philo->data->t_eat);
 	return 1;
 }
@@ -131,7 +127,6 @@ int	philo_think(t_philo *philo)
 	if(philo->data->philo_died > 0)
 		return 0;
 	printf(YEL"[%d]Philosopher %d is thinking\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
-	
 	return 1;
 }
 
