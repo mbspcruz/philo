@@ -49,17 +49,19 @@ void	start_dying(t_philo *philo, int time_to_die)
 
 int	will_not_die_bf_fork(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
+	pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
 	int time_to_die = 0;
-	if(philo->data->philo_died > 0)
-		return 0;
 	time_to_die = time_of_death(philo);
-	
-	if (philo->data->n_philo == 1 || time_to_die == 0)
+	if ((get_time() - philo->last_meal) > philo->data->t_die)
 	{
 		start_dying(philo, time_to_die);
+		pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 		return 0;
 	}
-	
+	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
+	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 	return 1;
 }
 
@@ -67,6 +69,9 @@ int	pick_up_fork(t_philo *philo)
 {	
 	if (!will_not_die_bf_fork(philo))
 		return 0;
+	if (philo->data->philo_died > 0)
+		return 0;
+	
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
@@ -82,13 +87,12 @@ int	pick_up_fork(t_philo *philo)
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
 		printf(PPL"[%d]Philosopher %d took a fork\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
 	}
-	
 	return 1;
 }
 
 int	philo_eat(t_philo *philo)
 {
-	if(philo->data->philo_died > 0)
+	if (philo->data->philo_died > 0)
 		return 0;
 	printf(CYN"[%d]Philosopher %d is eating\n" RESET, get_time() - philo->data->init_time, philo->philo_id);
 	pthread_mutex_lock(&philo->data->eat_lock);
@@ -104,6 +108,7 @@ int	philo_eat(t_philo *philo)
 		if (philo->data->meals >= philo->data->n_philo)
 		{
 			philo->data->philo_died = 1;
+			pthread_mutex_unlock(&philo->data->eat_lock);
 			return 0;
 		}
 		pthread_mutex_unlock(&philo->data->eat_lock);
@@ -148,8 +153,12 @@ void *action(void *p)
 	philo = (t_philo *)p;
 	if(philo->philo_id % 2 == 0)
 		usleep(100);
+	int time_to_die = 0;
+	time_to_die = time_of_death(philo);
+	if (philo->data->n_philo == 1)
+		start_dying(philo, time_to_die);
 	while(1)
-	{
+	{		
 		if (pick_up_fork(philo) != 1)
 			break;
 		if (philo_eat(philo) != 1)
@@ -170,7 +179,11 @@ int	start_sim(t_data *data)
 	while(i < data->n_philo)
 	{
 		if(pthread_create(&data->philo[i].thread, NULL, &action, &data->philo[i]))
+		{
+			usleep(100);
 			return (0);
+		}
+			
 		i++;
 	}
 	i = 0;
