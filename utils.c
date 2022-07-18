@@ -62,3 +62,11 @@ int	get_time()
 			return (0);
 	return((start.tv_sec * 1000) + (start.tv_usec / 1000));
 }
+
+void	sleepy_time(int time)
+{
+	int current = 0;
+	current = get_time();
+	while((get_time() - current) < time)
+		usleep (time / 10);
+}

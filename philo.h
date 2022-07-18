@@ -63,4 +63,5 @@ void			*action(void *p);
 int	get_time();
 void			ft_putstr_fd(char *str, int fd);
 long			ft_atoi(const char *str);
+void	sleepy_time(int time);
 #endif
