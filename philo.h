@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:19:38 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/17 16:22:16 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 15:28:12 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,17 @@ t_philo			*setup_philo(t_data *data);
 int				setup_mutex(t_data *data);
 int				start_sim(t_data *data);
 void			*action(void *p);
-int	get_time();
+int				get_time();
 void			ft_putstr_fd(char *str, int fd);
 long			ft_atoi(const char *str);
-void	sleepy_time(int time);
+void			sleepy_time(int time);
+int				check_death(t_philo *philo);
+int				will_not_die_bf_fork(t_philo *philo);
+int				time_of_death(t_philo *philo);
+void			start_dying(t_philo *philo, int time_to_die);
+int				philo_think(t_philo *philo);
+int				philo_sleep(t_philo *philo);
+int				let_go_forks(t_philo *philo);
+int				philo_eat(t_philo *philo);
+int				pick_up_fork(t_philo *philo);
 #endif
