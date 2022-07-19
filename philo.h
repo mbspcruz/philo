@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:19:38 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 15:28:12 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 15:51:44 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ int				philo_sleep(t_philo *philo);
 int				let_go_forks(t_philo *philo);
 int				philo_eat(t_philo *philo);
 int				pick_up_fork(t_philo *philo);
+void			free_clean(t_data *data);
 #endif

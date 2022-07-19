@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:18:53 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 15:23:29 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 15:54:16 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	start_sim(t_data *data)
 
 		if(pthread_join(data->philo[i].thread, NULL))
 			return (1);
-			
 		i++;
 	}
 	return(1);
@@ -73,7 +72,7 @@ int	main(int ac, char **av)
 {
 	t_data *data = NULL;
 	
-	if (!init_args(ac, av, data))
+	if (!valid_args(ac, av))
 	{
 		ft_putstr_fd("Error\nInvalid arguments\n", STDERR_FILENO);
 		return(1);
@@ -81,8 +80,10 @@ int	main(int ac, char **av)
 	data = init_args(ac, av, data);
 	if (!start_sim(data))
 	{
+		free_clean(data);
 		ft_putstr_fd("Error\nProblem creating threads\n", STDERR_FILENO);
 		return(2);
 	}
+	free_clean(data);
 	return 0;
 }

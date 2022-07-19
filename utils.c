@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:30:20 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/17 16:22:25 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 15:51:32 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,23 @@ void	sleepy_time(int time)
 	current = get_time();
 	while((get_time() - current) < time)
 		usleep (time / 10);
+}
+
+void	free_clean(t_data *data)
+{
+	int i = 0;
+	if (data->philo && data->n_philo > 0)
+	{
+		i = 0;
+		while(i < data->n_philo)
+		{
+			pthread_mutex_destroy(&(data->forks[i]));
+			i++;
+		}
+		free(data->forks);
+		free(data->philo);
+		pthread_mutex_destroy(&data->dead_lock);
+		pthread_mutex_destroy(&data->eat_lock);
+		free(data);
+	}
 }
