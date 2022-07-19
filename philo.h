@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:19:38 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 15:51:44 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 19:42:58 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int				time_of_death(t_philo *philo);
 void			start_dying(t_philo *philo, int time_to_die);
 int				philo_think(t_philo *philo);
 int				philo_sleep(t_philo *philo);
-int				let_go_forks(t_philo *philo);
+void 			let_go_forks(t_philo *philo);
 int				philo_eat(t_philo *philo);
 int				pick_up_fork(t_philo *philo);
 void			free_clean(t_data *data);

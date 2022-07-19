@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:18:53 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 15:54:16 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 20:11:50 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void *action(void *p)
 
 	philo = (t_philo *)p;
 	if(philo->philo_id % 2 == 0)
-		usleep(100);
+		sleepy_time(philo->data->t_eat);
 	int time_to_die = 0;
 	time_to_die = time_of_death(philo);
 	if (philo->data->n_philo == 1)
@@ -35,15 +35,13 @@ void *action(void *p)
 			break;
 		if (philo_eat(philo) != 1)
 			break;
-		if (let_go_forks(philo) != 1)
-			break;
 		if (philo_sleep(philo) != 1)
 			break;
 		if (philo_think(philo) != 1)
 			break;
-		usleep(1);
+		usleep(100);
 	}
-	return 0;
+	return 0;	
 }
 
 int	start_sim(t_data *data)
@@ -58,11 +56,11 @@ int	start_sim(t_data *data)
 		i++;
 	}
 	i = 0;
-	while(i < data->n_philo && data->philo_died == 0)
+	while(i < data->n_philo)
 	{
 
 		if(pthread_join(data->philo[i].thread, NULL))
-			return (1);
+			return (0);
 		i++;
 	}
 	return(1);

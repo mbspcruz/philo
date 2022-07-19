@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 15:24:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 16:00:36 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 18:27:49 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,17 @@ t_data	*setup_args(int ac, char **av, t_data *data)
 }
 
 int	valid_args(int ac, char **av)
-{	
-	printf("%d", ac);
-	if (ac < 5 || ac > 6)
-		return 0;
+{
+	int check = 1;
+	if (ac != 5 && ac != 6)
+		check = 0;
 	else if (!is_digit(ac, av))
-		return 0;
-	return 1;
+		check = 0;
+	return (check);
 }
 
 t_data	*init_args(int ac, char ** av, t_data *data)
 {
-	if (valid_args(ac, av) != 1)
-		return (NULL);
 	data = setup_args(ac, av, data);
 	if (!data)
 		return (NULL);

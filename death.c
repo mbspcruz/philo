@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 15:04:48 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 15:23:56 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/19 20:19:21 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	start_dying(t_philo *philo, int time_to_die)
 		printf(RED"[%d]Philosopher %d died\n" RESET, get_time() - philo->data->init_time + time_to_die, philo->philo_id);
 	philo->data->philo_died = 1;
 	pthread_mutex_unlock(&philo->data->dead_lock);
-	usleep(1);
 }
 
 //This helper function tells us the exact time
@@ -51,8 +50,7 @@ int	will_not_die_bf_fork(t_philo *philo)
 	int time_to_die = 0;
 	time_to_die = time_of_death(philo);
 	if ((get_time() - philo->last_meal) > philo->data->t_die)
-	{
-		
+	{	
 		start_dying(philo, time_to_die);
 		let_go_forks(philo);
 		return 0;
@@ -74,6 +72,5 @@ int	check_death(t_philo *philo)
 		return 1;
 	}
 	pthread_mutex_unlock(&philo->data->dead_lock);
-	usleep(1);
 	return 0;
 }
