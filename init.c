@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 15:24:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/19 18:27:49 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:27:41 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_philo	*setup_philo(t_data *data)
 	while (count < data->n_philo)
 	{
 		data->philo[count].philo_id = count + 1;
-		data->philo[count].n_meals = 0;
+		data->philo[count].n_meals = data->n_eat;
 		data->philo[count].data = data;
 		data->philo[count].left_fork = (count + 1) % data->n_philo;
 		data->philo[count].right_fork = count;
@@ -69,7 +69,6 @@ t_data	*setup_args(int ac, char **av, t_data *data)
 		data->n_eat = -1;
 	data->init_time = get_time();
 	data->philo_died = 0;
-	data->meals = 0;
 	return (data);
 }
 
