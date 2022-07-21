@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:18:53 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/20 19:24:54 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 14:22:59 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void *action(void *p)
 	philo = (t_philo *)p;
 	if(philo->philo_id % 2 == 0)
 		sleepy_time(philo->data->t_eat);
-	while(philo->n_meals != 0)
+	while(1)
 	{		
 		if (pick_up_fork(philo) != 1)
 			break;
@@ -37,7 +37,6 @@ void *action(void *p)
 			break;
 		if (philo_think(philo) != 1)
 			break;
-		usleep(1);
 	}
 	return 0;	
 }

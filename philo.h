@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:19:38 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/20 19:07:54 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 13:52:05 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_data
 	pthread_mutex_t *forks;
 	pthread_mutex_t dead_lock;
 	pthread_mutex_t eat_lock;
-	unsigned int	init_time;
+	int	init_time;
 	int				meals;
 	struct s_philo			*philo;  
 }				t_data;
@@ -67,11 +67,12 @@ void			sleepy_time(int time);
 int				check_death(t_philo *philo);
 int	will_die(t_philo *philo);
 int				time_of_death(t_philo *philo);
-void			start_dying(t_philo *philo, int time_to_die);
+void			start_dying(t_philo *philo);
 int				philo_think(t_philo *philo);
 int				philo_sleep(t_philo *philo);
 int 			let_go_forks(t_philo *philo);
 int				philo_eat(t_philo *philo);
 int				pick_up_fork(t_philo *philo);
 void			free_clean(t_data *data);
+void print_status(t_philo *philo, int key, int time);
 #endif
