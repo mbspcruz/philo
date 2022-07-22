@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 15:19:20 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 19:12:42 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:52:20 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	philo_eat(t_philo *philo)
 		let_go_forks(philo);
 		return 0;
 	}
-	philo->last_meal = get_time() - philo->data->init_time;
-	print_status(philo, 1, philo->last_meal);
+	philo->last_meal = time_diff(philo->last_meal, get_time());
+	print_status(philo, 1, time_diff(philo->data->init_time, get_time()));
 	(philo->n_meals)--;
 	if (philo->data->n_eat > 0 && philo->n_meals == 0)
 	{
@@ -67,7 +67,7 @@ int	philo_eat(t_philo *philo)
 		let_go_forks(philo);
 		return 0;
 	}
-	while((get_time() - philo->data->init_time) - philo->last_meal < philo->data->t_eat)
+	while(time_diff(philo->data->init_time, get_time()) - philo->last_meal < philo->data->t_eat)
 	{
 		if(check_death(philo))
 		{
@@ -101,13 +101,13 @@ int	philo_sleep(t_philo *philo)
 		return 0;
 	print_status(philo, 2, get_time() - philo->data->init_time);
 	int get_sleep = 0;
-	get_sleep = get_time() - philo->data->init_time;
+	get_sleep = time_diff(philo->data->init_time, get_time());
 	if (philo->data->t_sleep > philo->data->t_die)
 	{
 		check_death(philo);
 		return 0;
 	}
-	while((get_time() - philo->data->init_time) - get_sleep < philo->data->t_sleep)
+	while(time_diff(philo->data->init_time, get_time()) - get_sleep < philo->data->t_sleep)
 	{
 		if (check_death(philo))
 			return 0;

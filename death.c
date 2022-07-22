@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 15:04:48 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 19:13:04 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:55:33 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,38 +31,35 @@ int	time_of_death(t_philo *philo)
 	return (t_death);
 }
 
-//Before taking up a fork we need to know
-//If it's even worth it to pick it up
-//By comparing the last time it ate with the time to die
+
 int	will_die(t_philo *philo)
 {
-	if ((get_time() - philo->data->init_time) - philo->last_meal > philo->data->t_die)
+	if (time_diff(philo->data->init_time, get_time()) - philo->last_meal > philo->data->t_die)
 	{	
 		print_status(philo, 4, get_time() - philo->data->init_time);
-		//pthread_mutex_lock(&philo->data->dead_lock);
+		pthread_mutex_lock(&philo->data->dead_lock);
 		philo->data->philo_died = 1;
-		//pthread_mutex_unlock(&philo->data->dead_lock);
+		pthread_mutex_unlock(&philo->data->dead_lock);
 		return 1;
 	}
-	//pthread_mutex_unlock(&philo->data->dead_lock);
 	return 0;
 }
 
 //Check if any philo has died
 int	check_death(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->dead_lock);
+	//pthread_mutex_lock(&philo->data->dead_lock);
 	if (philo->data->philo_died)
 	{
-		pthread_mutex_unlock(&philo->data->dead_lock);
+	//	pthread_mutex_unlock(&philo->data->dead_lock);
 		return 1;
 	}
 	if (will_die(philo))
 	{
-		pthread_mutex_unlock(&philo->data->dead_lock);
+		//pthread_mutex_unlock(&philo->data->dead_lock);
 		return 1;
 	}
-	pthread_mutex_unlock(&philo->data->dead_lock);
+	//pthread_mutex_unlock(&philo->data->dead_lock);
 	return 0;
 }
 

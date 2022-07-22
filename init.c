@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 15:24:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 14:09:03 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:45:10 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_philo	*setup_philo(t_data *data)
 		data->philo[count].data = data;
 		data->philo[count].left_fork = (count + 1) % data->n_philo;
 		data->philo[count].right_fork = count;
-		data->philo[count].last_meal = get_time() - data->init_time;
+		data->philo[count].last_meal = data->init_time;
 		count++;
 	}
 	return (data->philo);

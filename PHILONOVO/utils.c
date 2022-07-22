@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 12:30:20 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 20:40:43 by mda-cruz         ###   ########.fr       */
+/*   Created: 2022/07/21 21:30:14 by mda-cruz          #+#    #+#             */
+/*   Updated: 2022/07/21 21:38:40 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,45 +52,5 @@ void	ft_putstr_fd(char *str, int fd)
 	{
 		write(fd, &str[i], 1);
 		i++;
-	}
-}
-
-int	get_time()
-{
-	struct timeval start;
-		if(gettimeofday(&start, NULL))
-			return (0);
-	return((start.tv_sec * 1000) + (start.tv_usec / 1000));
-}
-
-int	time_diff(int past, int current)
-{
-	return(current - past);
-}
-
-void	sleepy_time(int time)
-{
-	int current = 0;
-	current = get_time();
-	while((get_time() - current) < time)
-		usleep (time / 10);
-}
-
-void	free_clean(t_data *data)
-{
-	int i = 0;
-	if (data->philo && data->n_philo > 0)
-	{
-		i = 0;
-		while(i < data->n_philo)
-		{
-			pthread_mutex_destroy(&(data->forks[i]));
-			i++;
-		}
-		free(data->forks);
-		free(data->philo);
-		pthread_mutex_destroy(&data->dead_lock);
-		pthread_mutex_destroy(&data->eat_lock);
-		free(data);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:19:38 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 13:52:05 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/21 20:41:52 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,5 @@ int				philo_eat(t_philo *philo);
 int				pick_up_fork(t_philo *philo);
 void			free_clean(t_data *data);
 void print_status(t_philo *philo, int key, int time);
+int	time_diff(int past, int current);
 #endif
