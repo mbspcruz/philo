@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:39:24 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 15:31:09 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/22 17:05:51 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ t_bool	assign_philo(t_global *global)
 	{
 		global->philo[count].fork_left = (count + 1) % global->n_philo;
 		global->philo[count].fork_right = count;
-		global->philo[count].last_meal = 0;
+		global->philo[count].last_meal = global->time_init;
 		global->philo[count].n_meals = global->n_eat;
 		global->philo[count].global = global;
+		global->philo[count].philo_id = count + 1;
 		count++;
 	}
 	return TRUE;

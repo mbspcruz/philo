@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:30:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 15:30:50 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/22 17:21:29 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ int get_time()
 int time_diff(int past)
 {
 	int curr = get_time();
-	int t_diff = (past - curr);
+	int t_diff = (curr - past);
 	return (t_diff);
 }

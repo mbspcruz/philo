@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 15:32:09 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/22 17:38:01 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,28 @@ typedef int t_bool;
 
 typedef struct s_philo
 {
-	int philo_id;
-	int fork_left;
-	int fork_right;
-	int last_meal;
-	int n_meals;
-	struct s_global *global;
+	int				philo_id;
+	int				fork_left;
+	int				fork_right;
+	int				last_meal;
+	int				n_meals;
+	struct s_global	*global;
+	pthread_t		threads;
 }				t_philo;
 
 typedef struct s_global
 {
-	int	n_philo;
-	int	t_die;
-	int	t_eat;
-	int	t_sleep;
-	int	n_eat;
-	int philo_died;
-	int time_init;
+	int				n_philo;
+	int				t_die;
+	int				t_eat;
+	int				t_sleep;
+	int				n_eat;
+	int				philo_died;
+	int				time_init;
 	struct s_philo	*philo;
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	dead_lock;
+	
 }				t_global;
 
 
@@ -64,4 +67,8 @@ t_bool		assign_philo(t_global *global);
 t_bool		assign_rules(t_global *global, int ac, char **av);
 int 		get_time();
 int 		time_diff(int past);
+t_bool		init_simul(t_global *global);
+t_bool		init_mutexes(t_global *global);
+t_bool		init_threads (t_global *global);
+void		*action(void *p);
 #endif
