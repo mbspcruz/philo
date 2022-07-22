@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:30:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 21:38:40 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:30:50 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,38 @@ void	ft_putstr_fd(char *str, int fd)
 		write(fd, &str[i], 1);
 		i++;
 	}
+}
+
+int	is_digit(int ac, char **av)
+{
+	int i = 1;
+	int j = 0;
+	while(i < ac)
+	{
+		j = 0;
+		while(av[i][j])
+		{
+			if (!(av[i][j] >= '0' && av[i][j] <= '9'))
+				return 0;
+			j++;
+		}
+		i++;
+	}
+	return 1;
+}
+
+int get_time()
+{
+	struct timeval start;
+	int m_s;
+	gettimeofday(&start, NULL);
+	m_s = (start.tv_sec * 1000) + (start.tv_usec / 1000);
+	return (m_s);
+}
+
+int time_diff(int past)
+{
+	int curr = get_time();
+	int t_diff = (past - curr);
+	return (t_diff);
 }

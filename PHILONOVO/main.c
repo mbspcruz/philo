@@ -3,53 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/21 22:21:11 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:28:26 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	assign_rules(t_global *global, int ac, char **av)
+
+int get_time()
 {
-	if (!(global = (t_global *)malloc(sizeof(t_global))))
-		return FALSE;
-	global->n_philo = ft_atoi(av[1]);
-	global->t_die = ft_atoi(av[2]);
-	global->t_eat = ft_atoi(av[3]);
-	global->t_sleep = ft_atoi(av[4]);
-	if (ac == 6)
-		global->n_eat = ft_atoi(av[5]);
-	else
-		global->n_eat = -1;
-	return TRUE;
+	struct timeval start;
+	int m_s;
+	gettimeofday(&start, NULL);
+	m_s = (start.tv_sec * 1000) + (start.tv_usec / 1000);
+	return (m_s);
 }
 
-int	assign_philo(t_global *global)
+int time_diff(int past)
 {
-	int count;
-	
-	count = 0;
-	while()
-}
-
-int	check_args(t_global *global, int ac, char **av)
-{
-	if (!assign_rules (global, ac, av))
-		return FALSE;
-	if (!assign_philo(global))
-		return FALSE;
+	int curr = get_time();
+	int t_diff = (past - curr);
+	return (t_diff);
 }
 
 int	main(int ac, char **av)
 {
 	t_global *global;
-	
-	if (!check_args(global, ac, av))
+	global = NULL;
+
+	if (!check_args(ac, av))
 	{
 		ft_putstr_fd("Error with args", STDERR_FILENO);
 		return 1;
 	}
+	if (!init_global(global, ac, av))
+	{
+		ft_putstr_fd("Error with philo assignement", STDERR_FILENO);
+		return 2;
+	}
+	global = init_global(global, ac, av);
+	printf("%d\n", time_diff(global->time_init));
 }
