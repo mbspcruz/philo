@@ -3,71 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 17:55:29 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/23 02:30:47 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	start_dying(t_philo *philo, int time_to_die)
+void sleepy_time(t_philo *philo, int time_action)
 {
-	usleep(time_to_die * 1000);
-	pthread_mutex_lock(&philo->global->dead_lock);
-	printf(RED"[%d]Philosopher %d died\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
-	philo->global->philo_died = 1;
-	pthread_mutex_unlock(&philo->global->dead_lock);
-}
-
-int	get_time_until_death(t_philo *philo)
-{
-	int time_until_dead = 0;
-	int time_since_last_meal = 0;
-	time_since_last_meal = time_diff(philo->last_meal);
-	time_until_dead = philo->global->t_die - time_since_last_meal;
-	return (time_until_dead);
-}
-
-t_bool	will_die_before_fork(t_philo *philo)
-{
-	int time_to_die = 0;
-	time_to_die = get_time_until_death(philo);
-	if (philo->global->n_philo == 1 || philo->global->philo_died)
+	int start_time = get_time();
+	
+	while (!philo->global->philo_died)
 	{
-		start_dying(philo, time_to_die);
-		return TRUE;
+		if (time_diff(start_time) >= time_action)
+			break;
+		usleep(10 * time_action);
 	}
-
-	return (FALSE);
 }
 
-t_bool	pick_up_fork(t_philo *philo)
+void	check_death(t_global *global)
 {
-	int time = 0;
-	if (will_die_before_fork(philo))
-		return FALSE;
+	while(global->philo->n_meals != 0)
+	{
+		int count = 0;
+		while(count < global->n_philo && !global->philo_died)
+		{
+			if (time_diff(global->time_init) - global->philo[count].last_meal > global->t_die)
+			{
+				pthread_mutex_lock(&global->dead_lock);
+				print_action(global->philo, 4);
+				global->philo_died = 1;
+				pthread_mutex_unlock(&global->dead_lock);
+			}
+			count++;
+		}
+		if (global->philo_died)
+			break;
+	}
+}
+
+void	print_action(t_philo *philo, int key)
+{
+	pthread_mutex_lock(&philo->global->print_lock);
+	if (!philo->global->philo_died)
+	{
+		if (key == 0)
+		{
+			printf(PPL"[%d]Philosopher %d took a fork\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
+			printf(PPL"[%d]Philosopher %d took a fork\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
+		}
+		else if (key == 1)
+			printf(CYN"[%d]Philosopher %d is eating\n"RESET, time_diff(philo->global->time_init), philo->philo_id);
+		else if (key == 2)
+			printf(GRN"[%d]Philosopher %d is sleeping\n"RESET, time_diff(philo->global->time_init), philo->philo_id);
+		else if (key == 3)
+			printf(YEL"[%d]Philosopher %d is thinking\n"RESET, time_diff(philo->global->time_init), philo->philo_id);
+		else if (key == 4)
+			printf(RED"[%d]Philosopher %d died\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
+		pthread_mutex_unlock(&philo->global->print_lock);
+	}
+	pthread_mutex_unlock(&philo->global->print_lock);
+}
+
+void	pick_up_fork(t_philo *philo)
+{
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->global->forks[philo->fork_right]);
 		pthread_mutex_lock(&philo->global->forks[philo->fork_left]);
-		time = time_diff(philo->global->time_init);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->global->forks[philo->fork_left]);
 		pthread_mutex_lock(&philo->global->forks[philo->fork_right]);
-		time = time_diff(philo->global->time_init);
 	}
-	pthread_mutex_lock(&philo->global->dead_lock);
-	printf(PPL"[%d]Philosopher %d took a fork\n" RESET, time, philo->philo_id);
-	printf(PPL"[%d]Philosopher %d took a fork\n" RESET, time, philo->philo_id);
-	pthread_mutex_unlock(&philo->global->dead_lock);
-	return(TRUE);
+	print_action(philo, 0);
 }
 
-t_bool	drop_forks(t_philo *philo)
+void	drop_forks(t_philo *philo)
 {
 	if (philo->philo_id % 2 == 0)
 	{
@@ -76,18 +92,26 @@ t_bool	drop_forks(t_philo *philo)
 	}
 	else
 	{
-		pthread_mutex_lock(&philo->global->forks[philo->fork_left]);
-		pthread_mutex_lock(&philo->global->forks[philo->fork_right]);
+		pthread_mutex_unlock(&philo->global->forks[philo->fork_left]);
+		pthread_mutex_unlock(&philo->global->forks[philo->fork_right]);
 	}
 }
 
-t_bool	start_eating(t_philo *philo)
+void	start_eating(t_philo *philo)
 {
-	if (philo->global->philo_died)
-	{
-		drop_forks(philo);
-		return FALSE;
-	}
+	pthread_mutex_lock(&philo->global->eat_lock);
+	philo->last_meal = time_diff(philo->global->time_init);
+	print_action(philo, 1);
+	pthread_mutex_unlock(&philo->global->eat_lock);
+	sleepy_time(philo, philo->global->t_eat);
+	philo->n_meals--;
+	drop_forks(philo);
+}
+
+void	start_sleeping(t_philo *philo)
+{
+	print_action(philo, 2);
+	sleepy_time(philo, philo->global->t_sleep);
 }
 
 void	*action(void *p)
@@ -96,14 +120,15 @@ void	*action(void *p)
 	philo = (t_philo *)p;
 	if (philo->philo_id % 2 == 0)
 		usleep(100);
-	while(philo->n_meals != 0)
+	while(!philo->global->philo_died)
 	{ 
-		if (!pick_up_fork(philo))
+		if (philo->n_meals == 0)
 			break;
-		if (!start_eating(philo))
-			break;
+		pick_up_fork(philo);
+		start_eating(philo);
+		start_sleeping(philo);
+		print_action(philo, 3);
 	}
-		
 	return NULL;
 }
 

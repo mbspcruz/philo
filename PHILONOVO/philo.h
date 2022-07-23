@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 17:38:01 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/23 02:28:46 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ typedef struct s_global
 	struct s_philo	*philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	eat_lock;
+	pthread_mutex_t print_lock;
 	
 }				t_global;
 
@@ -71,4 +73,6 @@ t_bool		init_simul(t_global *global);
 t_bool		init_mutexes(t_global *global);
 t_bool		init_threads (t_global *global);
 void		*action(void *p);
+void		check_death(t_global *global);
+void	print_action(t_philo *philo, int key);
 #endif
