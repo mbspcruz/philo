@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/23 02:30:47 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/23 12:55:56 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,32 @@ void	check_death(t_global *global)
 		int count = 0;
 		while(count < global->n_philo && !global->philo_died)
 		{
+			pthread_mutex_lock(&global->is_dead_lock);
 			if (time_diff(global->time_init) - global->philo[count].last_meal > global->t_die)
 			{
-				pthread_mutex_lock(&global->dead_lock);
 				print_action(global->philo, 4);
 				global->philo_died = 1;
+				pthread_mutex_unlock(&global->is_dead_lock);
 				pthread_mutex_unlock(&global->dead_lock);
 			}
+
 			count++;
+			pthread_mutex_unlock(&global->is_dead_lock);
 		}
 		if (global->philo_died)
 			break;
+		if (global->philo->n_meals != -1)
+		{
+			count = 0;
+			while (global->philo[count].n_meals == 0)
+				count++;
+			if (count == global->n_philo)
+			{
+				global->philo_died = 1;
+				pthread_mutex_unlock(&global->dead_lock);
+			}
+
+		}
 	}
 }
 
@@ -63,7 +78,6 @@ void	print_action(t_philo *philo, int key)
 			printf(YEL"[%d]Philosopher %d is thinking\n"RESET, time_diff(philo->global->time_init), philo->philo_id);
 		else if (key == 4)
 			printf(RED"[%d]Philosopher %d died\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
-		pthread_mutex_unlock(&philo->global->print_lock);
 	}
 	pthread_mutex_unlock(&philo->global->print_lock);
 }
@@ -99,12 +113,14 @@ void	drop_forks(t_philo *philo)
 
 void	start_eating(t_philo *philo)
 {
+	print_action(philo, 1);
 	pthread_mutex_lock(&philo->global->eat_lock);
 	philo->last_meal = time_diff(philo->global->time_init);
-	print_action(philo, 1);
 	pthread_mutex_unlock(&philo->global->eat_lock);
 	sleepy_time(philo, philo->global->t_eat);
+	pthread_mutex_lock(&philo->global->is_dead_lock);
 	philo->n_meals--;
+	pthread_mutex_unlock(&philo->global->is_dead_lock);
 	drop_forks(philo);
 }
 

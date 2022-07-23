@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:36:41 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/23 01:58:24 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/23 12:36:00 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_bool	init_threads (t_global *global)
 {
 	int count;
 	count = 0;
+	pthread_mutex_lock(&global->dead_lock);
 	while (count < global->n_philo)
 	{
 		if (pthread_create(&global->philo[count].threads, NULL, &action, &global->philo[count]))
@@ -51,6 +52,8 @@ t_bool	init_mutexes(t_global *global)
 		return FALSE;
 	if (pthread_mutex_init(&global->eat_lock, NULL))
 		return FALSE;
+	if (pthread_mutex_init(&global->is_dead_lock, NULL))
+			return FALSE;
 	while (count <  global->n_philo)
 	{
 		if (pthread_mutex_init(&global->forks[count], NULL))
