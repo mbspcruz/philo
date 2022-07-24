@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/23 12:55:56 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/24 15:27:52 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,59 @@
 void sleepy_time(t_philo *philo, int time_action)
 {
 	int start_time = get_time();
-	
 	while (!philo->global->philo_died)
 	{
+		pthread_mutex_lock(&philo->global->is_dead_lock);
 		if (time_diff(start_time) >= time_action)
+		{
+			pthread_mutex_unlock(&philo->global->is_dead_lock);
 			break;
-		usleep(10 * time_action);
+		}
+		usleep(10);
+		pthread_mutex_unlock(&philo->global->is_dead_lock);
 	}
 }
 
 void	check_death(t_global *global)
 {
-	while(global->philo->n_meals != 0)
+	if (global->n_philo == 1)
 	{
-		int count = 0;
-		while(count < global->n_philo && !global->philo_died)
+		sleepy_time(global->philo, global->t_die);
+		print_action(global->philo, 4);
+		pthread_mutex_lock(&global->is_dead_lock);
+		global->philo_died = 1;
+		pthread_mutex_unlock(&global->is_dead_lock);
+	}
+	else
+	{
+		while(!global->all_meals)
 		{
-			pthread_mutex_lock(&global->is_dead_lock);
-			if (time_diff(global->time_init) - global->philo[count].last_meal > global->t_die)
+			int count = 0;
+			while(count < global->n_philo && !global->philo_died)
 			{
-				print_action(global->philo, 4);
-				global->philo_died = 1;
-				pthread_mutex_unlock(&global->is_dead_lock);
-				pthread_mutex_unlock(&global->dead_lock);
+			
+				if (time_diff(global->time_init) - global->philo[count].last_meal > global->t_die)
+				{
+					pthread_mutex_lock(&global->is_dead_lock);
+					print_action(global->philo, 4);
+					global->philo_died = 1;
+					usleep(25000);
+					pthread_mutex_unlock(&global->is_dead_lock);
+				}
+				count++;
+			//pthread_mutex_unlock(&global->is_dead_lock);
 			}
-
-			count++;
-			pthread_mutex_unlock(&global->is_dead_lock);
-		}
-		if (global->philo_died)
-			break;
-		if (global->philo->n_meals != -1)
-		{
+			if (global->philo_died)
+				break;
 			count = 0;
-			while (global->philo[count].n_meals == 0)
+			while (global->philo[count].n_meals >= global->n_eat && global->n_eat != -1 && count < global->n_philo)
 				count++;
 			if (count == global->n_philo)
 			{
-				global->philo_died = 1;
-				pthread_mutex_unlock(&global->dead_lock);
+			//pthread_mutex_lock(&global->is_dead_lock);
+				global->all_meals = 1;
+			//pthread_mutex_unlock(&global->dead_lock);
 			}
-
 		}
 	}
 }
@@ -118,9 +130,9 @@ void	start_eating(t_philo *philo)
 	philo->last_meal = time_diff(philo->global->time_init);
 	pthread_mutex_unlock(&philo->global->eat_lock);
 	sleepy_time(philo, philo->global->t_eat);
-	pthread_mutex_lock(&philo->global->is_dead_lock);
-	philo->n_meals--;
-	pthread_mutex_unlock(&philo->global->is_dead_lock);
+	//pthread_mutex_lock(&philo->global->eat_lock);
+	philo->n_meals++;
+	//pthread_mutex_unlock(&philo->global->eat_lock);
 	drop_forks(philo);
 }
 
@@ -135,13 +147,13 @@ void	*action(void *p)
 	t_philo *philo;
 	philo = (t_philo *)p;
 	if (philo->philo_id % 2 == 0)
-		usleep(100);
-	while(!philo->global->philo_died)
+		sleepy_time(philo, philo->global->t_eat);
+	while(!philo->global->philo_died && philo->global->n_philo != 1)
 	{ 
-		if (philo->n_meals == 0)
-			break;
 		pick_up_fork(philo);
 		start_eating(philo);
+		if (philo->global->all_meals)
+			break;
 		start_sleeping(philo);
 		print_action(philo, 3);
 	}

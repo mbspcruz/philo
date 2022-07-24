@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/23 12:35:06 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/24 13:11:43 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,14 @@ typedef struct s_philo
 	int				fork_right;
 	int				last_meal;
 	int				n_meals;
+
 	struct s_global	*global;
 	pthread_t		threads;
 }				t_philo;
 
 typedef struct s_global
-{
+{	
+	int				all_meals;
 	int				n_philo;
 	int				t_die;
 	int				t_eat;

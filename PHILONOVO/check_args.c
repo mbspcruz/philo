@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:39:24 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 17:05:51 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/24 13:12:10 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_bool	assign_rules(t_global *global, int ac, char **av)
 	else
 		global->n_eat = -1;
 	global->philo_died = 0;
+	global->all_meals = 0;
 	global->time_init = get_time();
 	return TRUE;
 }
@@ -39,7 +40,7 @@ t_bool	assign_philo(t_global *global)
 		global->philo[count].fork_left = (count + 1) % global->n_philo;
 		global->philo[count].fork_right = count;
 		global->philo[count].last_meal = global->time_init;
-		global->philo[count].n_meals = global->n_eat;
+		global->philo[count].n_meals = 0;
 		global->philo[count].global = global;
 		global->philo[count].philo_id = count + 1;
 		count++;
