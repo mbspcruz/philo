@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_simul.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:36:41 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/24 16:57:40 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/25 14:48:16 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,13 @@ t_bool	init_threads (t_global *global)
 		usleep(200);
 		count++;
 	}
-	check_death(global);
+	return TRUE;
+}
+
+int	finish_destroy(t_global *global)
+{
+	int count;
+	
 	count = 0;
 	while (count < global->n_philo)
 	{

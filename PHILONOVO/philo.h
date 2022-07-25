@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/24 13:11:43 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/25 14:49:37 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ t_bool		init_mutexes(t_global *global);
 t_bool		init_threads (t_global *global);
 void		*action(void *p);
 void		check_death(t_global *global);
-void	print_action(t_philo *philo, int key);
+void		print_action(t_philo *philo, int key);
+int			finish_destroy(t_global *global);
 #endif
