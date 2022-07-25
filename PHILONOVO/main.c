@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/24 15:27:52 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/24 18:50:50 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ void sleepy_time(t_philo *philo, int time_action)
 	int start_time = get_time();
 	while (!philo->global->philo_died)
 	{
-		pthread_mutex_lock(&philo->global->is_dead_lock);
+		//pthread_mutex_lock(&philo->global->is_dead_lock);
 		if (time_diff(start_time) >= time_action)
 		{
-			pthread_mutex_unlock(&philo->global->is_dead_lock);
+			//pthread_mutex_unlock(&philo->global->is_dead_lock);
 			break;
 		}
 		usleep(10);
-		pthread_mutex_unlock(&philo->global->is_dead_lock);
+		//pthread_mutex_unlock(&philo->global->is_dead_lock);
 	}
 }
 
@@ -129,6 +129,7 @@ void	start_eating(t_philo *philo)
 	pthread_mutex_lock(&philo->global->eat_lock);
 	philo->last_meal = time_diff(philo->global->time_init);
 	pthread_mutex_unlock(&philo->global->eat_lock);
+	pthread_mutex_unlock(&philo->global->is_dead_lock);
 	sleepy_time(philo, philo->global->t_eat);
 	//pthread_mutex_lock(&philo->global->eat_lock);
 	philo->n_meals++;
@@ -147,16 +148,20 @@ void	*action(void *p)
 	t_philo *philo;
 	philo = (t_philo *)p;
 	if (philo->philo_id % 2 == 0)
-		sleepy_time(philo, philo->global->t_eat);
+		usleep(1000);
+	pthread_mutex_lock(&philo->global->is_dead_lock);
 	while(!philo->global->philo_died && philo->global->n_philo != 1)
 	{ 
+		
 		pick_up_fork(philo);
 		start_eating(philo);
 		if (philo->global->all_meals)
 			break;
 		start_sleeping(philo);
 		print_action(philo, 3);
+		pthread_mutex_unlock(&philo->global->is_dead_lock);
 	}
+	pthread_mutex_unlock(&philo->global->is_dead_lock);
 	return NULL;
 }
 
