@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:36:41 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/25 14:48:16 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/26 18:55:32 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_bool	init_threads (t_global *global)
 {
 	int count;
 	count = 0;
-	//pthread_mutex_lock(&global->dead_lock);
 	while (count < global->n_philo)
 	{
 		if (pthread_create(&global->philo[count].threads, NULL, &action, &global->philo[count]))
@@ -45,9 +44,7 @@ int	finish_destroy(t_global *global)
 			return FALSE;
 		count++;
 	}
-	pthread_mutex_destroy(&global->is_dead_lock);
 	pthread_mutex_destroy(&global->dead_lock);
-	pthread_mutex_destroy(&global->eat_lock);
 	pthread_mutex_destroy(&global->print_lock);
 	free(global->philo);
 	free(global);
@@ -62,10 +59,8 @@ t_bool	init_mutexes(t_global *global)
 		return FALSE;
 	if (pthread_mutex_init(&global->dead_lock, NULL))
 		return FALSE;
-	if (pthread_mutex_init(&global->eat_lock, NULL))
+	if (pthread_mutex_init(&global->print_lock, NULL))
 		return FALSE;
-	if (pthread_mutex_init(&global->is_dead_lock, NULL))
-			return FALSE;
 	while (count <  global->n_philo)
 	{
 		if (pthread_mutex_init(&global->forks[count], NULL))

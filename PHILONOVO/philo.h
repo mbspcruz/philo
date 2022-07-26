@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/25 14:49:37 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/26 18:50:51 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ typedef struct s_global
 	struct s_philo	*philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	dead_lock;
-	pthread_mutex_t	eat_lock;
 	pthread_mutex_t print_lock;
-	pthread_mutex_t is_dead_lock;
-	
 }				t_global;
 
 

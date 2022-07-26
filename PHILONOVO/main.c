@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:31:44 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/25 21:14:48 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/26 18:53:02 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 
 void sleepy_time(t_philo *philo, int time_action)
 {
-	//pthread_mutex_lock(&philo->global->is_dead_lock);
 	int start_time = get_time();
-	//pthread_mutex_unlock(&philo->global->is_dead_lock);
-	while (!philo->global->philo_died)
-	{
-		if (time_diff(start_time) >= time_action)
+	while (time_diff(start_time) < time_action)
+	{	
+		pthread_mutex_lock(&philo->global->dead_lock);
+		if (philo->global->philo_died)
 		{
-			
+			pthread_mutex_unlock(&philo->global->dead_lock);
 			break;
 		}
+		pthread_mutex_unlock(&philo->global->dead_lock);
 		usleep(10);
-		//pthread_mutex_unlock(&philo->global->is_dead_lock);
 	}
-	//pthread_mutex_unlock(&philo->global->is_dead_lock);
 }
 
 void	check_death(t_global *global)
@@ -36,9 +34,7 @@ void	check_death(t_global *global)
 	{
 		sleepy_time(global->philo, global->t_die);
 		print_action(global->philo, 4);
-		//pthread_mutex_lock(&global->is_dead_lock);
 		global->philo_died = 1;
-		//pthread_mutex_unlock(&global->is_dead_lock);
 	}
 	else
 	{
@@ -51,22 +47,18 @@ void	check_death(t_global *global)
 				if (time_diff(global->time_init) - global->philo[count].last_meal > global->t_die)
 				{
 					print_action(global->philo, 4);
-					//pthread_mutex_lock(&global->dead_lock);
-					//pthread_mutex_lock(&global->is_dead_lock);
 					global->philo_died = 1;
-					//pthread_mutex_unlock(&global->is_dead_lock);
 					usleep(25000);
 					pthread_mutex_unlock(&global->dead_lock);
 					break;
 				}
 				pthread_mutex_unlock(&global->dead_lock);
 				count++;
-			//pthread_mutex_unlock(&global->is_dead_lock);
 			}
 			if (global->philo_died)
 				break;
-			count = 0;
 			pthread_mutex_lock(&global->dead_lock);
+			count = 0;
 			while (global->philo[count].n_meals >= global->n_eat && global->n_eat != -1 && count < global->n_philo)
 				count++;
 			pthread_mutex_unlock(&global->dead_lock);
@@ -82,7 +74,7 @@ void	check_death(t_global *global)
 
 void	print_action(t_philo *philo, int key)
 {
-	//pthread_mutex_lock(&philo->global->print_lock);
+	pthread_mutex_lock(&philo->global->print_lock);
 	if (!philo->global->philo_died)
 	{
 		if (key == 0)
@@ -99,7 +91,7 @@ void	print_action(t_philo *philo, int key)
 		else if (key == 4)
 			printf(RED"[%d]Philosopher %d died\n" RESET, time_diff(philo->global->time_init), philo->philo_id);
 	}
-	//pthread_mutex_unlock(&philo->global->print_lock);
+	pthread_mutex_unlock(&philo->global->print_lock);
 }
 
 void	pick_up_fork(t_philo *philo)
@@ -134,12 +126,9 @@ void	drop_forks(t_philo *philo)
 void	start_eating(t_philo *philo)
 {
 	print_action(philo, 1);
-	//pthread_mutex_lock(&philo->global->eat_lock);
 	pthread_mutex_lock(&philo->global->dead_lock);
 	philo->last_meal = time_diff(philo->global->time_init);
 	pthread_mutex_unlock(&philo->global->dead_lock);
-	//pthread_mutex_unlock(&philo->global->eat_lock);
-	//pthread_mutex_lock(&philo->global->is_dead_lock);
 	sleepy_time(philo, philo->global->t_eat);
 	pthread_mutex_lock(&philo->global->dead_lock);
 	philo->n_meals++;
@@ -159,14 +148,12 @@ void	*action(void *p)
 	philo = (t_philo *)p;
 	if (philo->philo_id % 2 == 0)
 		usleep(1000);
-	//pthread_mutex_lock(&philo->global->is_dead_lock);
-	while(!philo->global->philo_died && philo->global->n_philo != 1)
+	while(philo->global->n_philo != 1)
 	{ 
-		
 		pick_up_fork(philo);
 		start_eating(philo);
 		pthread_mutex_lock(&philo->global->dead_lock);
-		if (philo->global->all_meals)
+		if (philo->global->all_meals || philo->global->philo_died)
 		{
 			pthread_mutex_unlock(&philo->global->dead_lock);
 			break;
@@ -174,9 +161,7 @@ void	*action(void *p)
 		pthread_mutex_unlock(&philo->global->dead_lock);	
 		start_sleeping(philo);
 		print_action(philo, 3);
-		//pthread_mutex_unlock(&philo->global->is_dead_lock);
 	}
-	//pthread_mutex_unlock(&philo->global->dead_lock);
 	return NULL;
 }
 

@@ -6,7 +6,7 @@ NAME = philo
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror -g -pthread
+CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=address
 
 %.o:%.c *.h
 	$(CC) $(CFLAGS) -c $< -o $@
