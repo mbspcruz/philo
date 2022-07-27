@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:30:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/22 17:21:29 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/27 19:10:02 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,36 +55,42 @@ void	ft_putstr_fd(char *str, int fd)
 	}
 }
 
-int	is_digit(int ac, char **av)
+t_bool	is_digit(int ac, char **av)
 {
-	int i = 1;
-	int j = 0;
-	while(i < ac)
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < ac)
 	{
 		j = 0;
-		while(av[i][j])
+		while (av[i][j])
 		{
 			if (!(av[i][j] >= '0' && av[i][j] <= '9'))
-				return 0;
+				return (FALSE);
 			j++;
 		}
 		i++;
 	}
-	return 1;
+	return (TRUE);
 }
 
-int get_time()
+int	get_time(void)
 {
-	struct timeval start;
-	int m_s;
-	gettimeofday(&start, NULL);
+	struct timeval	start;
+	int				m_s;
+
+	gettimeofday (&start, NULL);
 	m_s = (start.tv_sec * 1000) + (start.tv_usec / 1000);
 	return (m_s);
 }
 
-int time_diff(int past)
+int	time_diff(int past)
 {
-	int curr = get_time();
-	int t_diff = (curr - past);
+	int	curr;
+	int	t_diff;
+
+	curr = get_time();
+	t_diff = (curr - past);
 	return (t_diff);
 }
