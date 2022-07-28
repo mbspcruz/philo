@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 17:36:41 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:15:07 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/28 18:45:15 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	finish_destroy(t_global *global)
 	}
 	pthread_mutex_destroy(&global->dead_lock);
 	pthread_mutex_destroy(&global->print_lock);
+	free(global->forks);
 	free(global->philo);
 	free(global);
 	return (TRUE);
@@ -58,8 +59,7 @@ t_bool	init_mutexes(t_global *global)
 	int	count;
 
 	count = 0;
-	global->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
-			* global->n_philo);
+	global->forks = ft_calloc(global->n_philo, sizeof(pthread_mutex_t));
 	if (!(global->forks))
 		return (FALSE);
 	if (pthread_mutex_init(&global->dead_lock, NULL))

@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:39:24 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:03:29 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/28 18:42:35 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_bool	assign_philo(t_global *global)
 	int	count;
 
 	count = 0;
-	global->philo = malloc(sizeof(t_philo) * global->n_philo + 1);
+	global->philo = ft_calloc(global->n_philo, sizeof(t_philo));
 	if (!(global->philo))
 		return (FALSE);
 	while (count < global->n_philo)
@@ -51,7 +51,7 @@ t_bool	assign_philo(t_global *global)
 
 t_global	*init_global(t_global *global, int ac, char **av)
 {
-	global = (t_global *)malloc(sizeof(t_global));
+	global = ft_calloc(1, sizeof(t_global));
 	if (!(global))
 		return (NULL);
 	if (!assign_rules (global, ac, av))

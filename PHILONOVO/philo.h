@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:30:39 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/28 18:40:48 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <stdio.h>
+# include <string.h>
 
 typedef int	t_bool;
 # define TRUE 1
@@ -82,4 +83,6 @@ void		start_sleeping(t_philo *philo);
 void		die(t_global *global);
 void		will_philo_die(t_global *global);
 void		is_philo_satisfied(t_global *global);
+void		*ft_calloc(size_t num, size_t size);
+void		ft_bzero(void *s, size_t n);
 #endif

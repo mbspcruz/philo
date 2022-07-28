@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:30:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:10:02 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/28 18:40:21 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,20 @@ int	time_diff(int past)
 	curr = get_time();
 	t_diff = (curr - past);
 	return (t_diff);
+}
+
+void	*ft_calloc(size_t num, size_t size)
+{
+	size_t *ptr;
+
+	ptr = malloc(num * size);
+	if (ptr == 0)
+		return (ptr);
+	ft_bzero(ptr, num * size);
+	return (ptr);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	memset(s, 0, n);
 }

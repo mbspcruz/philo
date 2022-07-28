@@ -6,7 +6,7 @@
 /*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 18:35:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:30:44 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/07/28 11:54:12 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	is_philo_satisfied(t_global *global)
 	count = 0;
 	while (global->philo[count].n_meals >= global->n_eat
 		&& global->n_eat != -1 && count < global->n_philo)
-		count++;
+			count++;
 	pthread_mutex_unlock(&global->dead_lock);
 	if (count == global->n_philo)
 	{
