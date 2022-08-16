@@ -1,12 +1,13 @@
 CC = gcc 
 
-SRCS = $(wildcard *.c)
+SRCS = action_utils.c actions.c check_args.c death.c init_simul.c \
+       main.c utils.c
 
 NAME = philo
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror -g -pthread -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -pthread
 
 %.o:%.c *.h
 	$(CC) $(CFLAGS) -c $< -o $@
