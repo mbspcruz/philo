@@ -22,7 +22,6 @@ t_bool	init_threads(t_global *global)
 		if (pthread_create(&global->philo[count].threads, NULL,
 				&action, &global->philo[count]))
 			return (FALSE);
-		usleep(200);
 		count++;
 	}
 	return (TRUE);

@@ -75,38 +75,13 @@ t_bool	is_digit(int ac, char **av)
 	return (TRUE);
 }
 
-int	get_time(void)
-{
-	struct timeval	start;
-	int				m_s;
-
-	gettimeofday (&start, NULL);
-	m_s = (start.tv_sec * 1000) + (start.tv_usec / 1000);
-	return (m_s);
-}
-
-int	time_diff(int past)
-{
-	int	curr;
-	int	t_diff;
-
-	curr = get_time();
-	t_diff = (curr - past);
-	return (t_diff);
-}
-
 void	*ft_calloc(size_t num, size_t size)
 {
-	size_t *ptr;
+	size_t	*ptr;
 
 	ptr = malloc(num * size);
 	if (ptr == 0)
 		return (ptr);
-	ft_bzero(ptr, num * size);
+	memset(ptr, 0, num * size);
 	return (ptr);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	memset(s, 0, n);
 }

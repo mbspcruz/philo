@@ -14,13 +14,13 @@
 
 void	start_sleeping(t_philo *philo)
 {
-	print_action(philo, 2);
+	print_action(philo, SLEEP);
 	sleepy_time(philo, philo->global->t_sleep);
 }
 
 void	start_eating(t_philo *philo)
 {
-	print_action(philo, 1);
+	print_action(philo, EAT);
 	pthread_mutex_lock(&philo->global->dead_lock);
 	philo->last_meal = time_diff(philo->global->time_init);
 	pthread_mutex_unlock(&philo->global->dead_lock);
@@ -44,7 +44,7 @@ void	pick_up_fork(t_philo *philo)
 		pthread_mutex_lock(&philo->global->forks[philo->fork_left]);
 		pthread_mutex_lock(&philo->global->forks[philo->fork_right]);
 	}
-	print_action(philo, 0);
+	print_action(philo, TAKE_FORK);
 }
 
 void	*action(void *p)
@@ -66,7 +66,7 @@ void	*action(void *p)
 		}
 		pthread_mutex_unlock(&philo->global->dead_lock);
 		start_sleeping(philo);
-		print_action(philo, 3);
+		print_action(philo, THINK);
 	}
 	return (NULL);
 }

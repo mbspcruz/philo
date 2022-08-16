@@ -31,6 +31,12 @@ typedef int	t_bool;
 # define TRUE 1
 # define FALSE 0
 
+# define TAKE_FORK 0
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
+# define DIE 4
+
 typedef struct s_philo
 {
 	int				philo_id;
@@ -85,4 +91,5 @@ void		will_philo_die(t_global *global);
 void		is_philo_satisfied(t_global *global);
 void		*ft_calloc(size_t num, size_t size);
 void		ft_bzero(void *s, size_t n);
+int			check_simul(t_global *global);
 #endif

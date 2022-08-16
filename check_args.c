@@ -40,7 +40,7 @@ t_bool	assign_philo(t_global *global)
 	{
 		global->philo[count].fork_left = (count + 1) % global->n_philo;
 		global->philo[count].fork_right = count;
-		global->philo[count].last_meal = global->time_init;
+		global->philo[count].last_meal = 0;
 		global->philo[count].n_meals = 0;
 		global->philo[count].global = global;
 		global->philo[count].philo_id = count + 1;

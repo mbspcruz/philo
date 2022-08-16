@@ -12,6 +12,26 @@
 
 #include "philo.h"
 
+int	get_time(void)
+{
+	struct timeval	start;
+	int				m_s;
+
+	gettimeofday (&start, NULL);
+	m_s = (start.tv_sec * 1000) + (start.tv_usec / 1000);
+	return (m_s);
+}
+
+int	time_diff(int past)
+{
+	int	curr;
+	int	t_diff;
+
+	curr = get_time();
+	t_diff = (curr - past);
+	return (t_diff);
+}
+
 void	sleepy_time(t_philo *philo, int time_action)
 {
 	int	start_time;
@@ -35,23 +55,23 @@ void	print_action(t_philo *philo, int key)
 	pthread_mutex_lock(&philo->global->print_lock);
 	if (!philo->global->philo_died)
 	{
-		if (key == 0)
+		if (key == TAKE_FORK)
 		{
 			printf(PPL"[%d]Philosopher %d took a fork\n" RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
 			printf(PPL"[%d]Philosopher %d took a fork\n" RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
 		}
-		else if (key == 1)
+		else if (key == EAT)
 			printf(CYN"[%d]Philosopher %d is eating\n"RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
-		else if (key == 2)
+		else if (key == SLEEP)
 			printf(GRN"[%d]Philosopher %d is sleeping\n"RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
-		else if (key == 3)
+		else if (key == THINK)
 			printf(YEL"[%d]Philosopher %d is thinking\n"RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
-		else if (key == 4)
+		else if (key == DIE)
 			printf(RED"[%d]Philosopher %d died\n" RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
 	}

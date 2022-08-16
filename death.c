@@ -14,7 +14,7 @@
 
 void	die(t_global *global)
 {
-	print_action(global->philo, 4);
+	print_action(global->philo, DIE);
 	global->philo_died = 1;
 }
 
@@ -45,8 +45,9 @@ void	is_philo_satisfied(t_global *global)
 
 	pthread_mutex_lock(&global->dead_lock);
 	count = 0;
-	while (global->philo[count].n_meals >= global->n_eat
-		&& global->n_eat != -1 && count < global->n_philo)
+	if (global->n_eat != -1)
+		while (count < global->n_philo
+			&& global->philo[count].n_meals >= global->n_eat)
 			count++;
 	pthread_mutex_unlock(&global->dead_lock);
 	if (count == global->n_philo)
