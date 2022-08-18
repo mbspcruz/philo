@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 18:35:14 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/28 11:54:12 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:41:34 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	die(t_global *global)
 	global->philo_died = 1;
 }
 
-void	will_philo_die(t_global *global)
+t_bool	will_philo_die(t_global *global)
 {
 	int	count;
 
@@ -32,30 +32,24 @@ void	will_philo_die(t_global *global)
 			die(global);
 			usleep(25000);
 			pthread_mutex_unlock(&global->dead_lock);
-			break ;
+			return (TRUE);
+		}
+		pthread_mutex_unlock(&global->dead_lock);
+		pthread_mutex_lock(&global->dead_lock);
+		if (global->full == global->n_philo)
+		{	
+			pthread_mutex_lock(&global->print_lock);
+			global->philo_died = 1;
+			usleep(25000);
+			pthread_mutex_unlock(&global->print_lock);
+			pthread_mutex_unlock(&global->dead_lock);
+			return (TRUE);
 		}
 		pthread_mutex_unlock(&global->dead_lock);
 		count++;
+		usleep(500);
 	}
-}
-
-void	is_philo_satisfied(t_global *global)
-{
-	int	count;
-
-	pthread_mutex_lock(&global->dead_lock);
-	count = 0;
-	if (global->n_eat != -1)
-		while (count < global->n_philo
-			&& global->philo[count].n_meals >= global->n_eat)
-			count++;
-	pthread_mutex_unlock(&global->dead_lock);
-	if (count == global->n_philo)
-	{
-		pthread_mutex_lock(&global->dead_lock);
-		global->all_meals = 1;
-		pthread_mutex_unlock(&global->dead_lock);
-	}
+	return(FALSE);
 }
 
 void	check_death(t_global *global)
@@ -67,9 +61,10 @@ void	check_death(t_global *global)
 	}
 	else
 	{
-		while (!global->all_meals)
+		while (TRUE)
 		{
-			will_philo_die(global);
+			if (will_philo_die(global))
+				break ;
 			pthread_mutex_lock(&global->dead_lock);
 			if (global->philo_died)
 			{
@@ -77,7 +72,6 @@ void	check_death(t_global *global)
 				break ;
 			}
 			pthread_mutex_unlock(&global->dead_lock);
-			is_philo_satisfied(global);
 		}
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 18:34:13 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/27 19:16:51 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:21:50 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	sleepy_time(t_philo *philo, int time_action)
 
 void	print_action(t_philo *philo, int key)
 {
-	pthread_mutex_lock(&philo->global->print_lock);
+	pthread_mutex_lock(&philo->global->dead_lock);
 	if (!philo->global->philo_died)
 	{
 		if (key == TAKE_FORK)
@@ -75,7 +75,7 @@ void	print_action(t_philo *philo, int key)
 			printf(RED"[%d]Philosopher %d died\n" RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
 	}
-	pthread_mutex_unlock(&philo->global->print_lock);
+	pthread_mutex_unlock(&philo->global->dead_lock);
 }
 
 void	drop_forks(t_philo *philo)

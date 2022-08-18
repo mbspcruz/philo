@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:39:24 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/28 18:42:35 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/08/18 13:59:07 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ t_bool	assign_rules(t_global *global, int ac, char **av)
 	else
 		global->n_eat = -1;
 	global->philo_died = 0;
-	global->all_meals = 0;
 	global->time_init = get_time();
+	global->full = 0;
 	return (TRUE);
 }
 
@@ -66,6 +66,8 @@ t_bool	check_args(int ac, char **av)
 	if (ac != 5 && ac != 6)
 		return (FALSE);
 	if (!is_digit(ac, av))
+		return (FALSE);
+	if (ft_atoi(av[1]) < 1)
 		return (FALSE);
 	return (TRUE);
 }

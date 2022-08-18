@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mda-cruz <mda-cruz@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: mda-cruz <mda-cruz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 21:29:29 by mda-cruz          #+#    #+#             */
-/*   Updated: 2022/07/28 18:40:48 by mda-cruz         ###   ########.fr       */
+/*   Updated: 2022/08/18 13:03:13 by mda-cruz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,13 @@ typedef struct s_philo
 	int				fork_right;
 	int				last_meal;
 	int				n_meals;
-
 	struct s_global	*global;
 	pthread_t		threads;
 }				t_philo;
 
 typedef struct s_global
 {	
-	int				all_meals;
+	int				full;
 	int				n_philo;
 	int				t_die;
 	int				t_eat;
@@ -87,7 +86,7 @@ void		pick_up_fork(t_philo *philo);
 void		start_eating(t_philo *philo);
 void		start_sleeping(t_philo *philo);
 void		die(t_global *global);
-void		will_philo_die(t_global *global);
+t_bool		will_philo_die(t_global *global);
 void		is_philo_satisfied(t_global *global);
 void		*ft_calloc(size_t num, size_t size);
 void		ft_bzero(void *s, size_t n);
