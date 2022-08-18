@@ -86,7 +86,7 @@ void		pick_up_fork(t_philo *philo);
 void		start_eating(t_philo *philo);
 void		start_sleeping(t_philo *philo);
 void		die(t_global *global);
-t_bool		will_philo_die(t_global *global);
+void		will_philo_die(t_global *global);
 void		is_philo_satisfied(t_global *global);
 void		*ft_calloc(size_t num, size_t size);
 void		ft_bzero(void *s, size_t n);

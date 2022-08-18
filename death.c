@@ -16,9 +16,19 @@ void	die(t_global *global)
 {
 	print_action(global->philo, DIE);
 	global->philo_died = 1;
+	usleep(25000);
 }
 
-t_bool	will_philo_die(t_global *global)
+void	is_satisfied(t_global *global)
+{
+	pthread_mutex_lock(&global->print_lock);
+	global->philo_died = 1;
+	usleep(25000);
+	pthread_mutex_unlock(&global->print_lock);
+	pthread_mutex_unlock(&global->dead_lock);
+}
+
+void	will_philo_die(t_global *global)
 {
 	int	count;
 
@@ -30,26 +40,18 @@ t_bool	will_philo_die(t_global *global)
 			> global->t_die)
 		{
 			die(global);
-			usleep(25000);
 			pthread_mutex_unlock(&global->dead_lock);
-			return (TRUE);
+			break ;
 		}
-		pthread_mutex_unlock(&global->dead_lock);
-		pthread_mutex_lock(&global->dead_lock);
 		if (global->full == global->n_philo)
 		{	
-			pthread_mutex_lock(&global->print_lock);
-			global->philo_died = 1;
-			usleep(25000);
-			pthread_mutex_unlock(&global->print_lock);
-			pthread_mutex_unlock(&global->dead_lock);
-			return (TRUE);
+			is_satisfied(global);
+			break ;
 		}
 		pthread_mutex_unlock(&global->dead_lock);
 		count++;
 		usleep(500);
 	}
-	return(FALSE);
 }
 
 void	check_death(t_global *global)
@@ -63,8 +65,7 @@ void	check_death(t_global *global)
 	{
 		while (TRUE)
 		{
-			if (will_philo_die(global))
-				break ;
+			will_philo_die(global);
 			pthread_mutex_lock(&global->dead_lock);
 			if (global->philo_died)
 			{

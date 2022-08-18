@@ -52,7 +52,7 @@ void	sleepy_time(t_philo *philo, int time_action)
 
 void	print_action(t_philo *philo, int key)
 {
-	pthread_mutex_lock(&philo->global->dead_lock);
+	pthread_mutex_lock(&philo->global->print_lock);
 	if (!philo->global->philo_died)
 	{
 		if (key == TAKE_FORK)
@@ -75,7 +75,7 @@ void	print_action(t_philo *philo, int key)
 			printf(RED"[%d]Philosopher %d died\n" RESET,
 				time_diff(philo->global->time_init), philo->philo_id);
 	}
-	pthread_mutex_unlock(&philo->global->dead_lock);
+	pthread_mutex_unlock(&philo->global->print_lock);
 }
 
 void	drop_forks(t_philo *philo)

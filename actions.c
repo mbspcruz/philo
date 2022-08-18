@@ -58,7 +58,7 @@ void	*action(void *p)
 	philo = (t_philo *)p;
 	if (philo->philo_id % 2 == 0)
 		usleep(100);
-	while (philo->global->n_philo > 1)
+	while (philo->global->n_philo != 1)
 	{
 		pick_up_fork(philo);
 		start_eating(philo);
